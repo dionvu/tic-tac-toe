@@ -17,4 +17,14 @@ body {
   width: var(--board-size);
 
   display: grid;
+
+  gap: 1px;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.square {
+  background: red;
+  height: 100%;
+  width: 100%;
+  border: 1px solid black;
 }
