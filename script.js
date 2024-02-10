@@ -98,20 +98,20 @@ const Game = (function() {
       player2 = createPlayer(O);
     }
 
-    do {
-      if (player1.getIcon() === X) {
-        if (Board.checkWin() === player1.getIcon()) break;
-        Board.display();
-        if (Board.checkTie()) break;
-      }
-
-      else {
-        if (Board.checkWin() === player2.getIcon()) break;
-        Board.display();
-        if (Board.checkTie()) break;
-      }
-      Board.display();
-    } while (Board.checkWin() != O && Board.checkWin() != X);
+    // do {
+    //   if (player1.getIcon() === X) {
+    //     if (Board.checkWin() === player1.getIcon()) break;
+    //     Board.display();
+    //     if (Board.checkTie()) break;
+    //   }
+    //
+    //   else {
+    //     if (Board.checkWin() === player2.getIcon()) break;
+    //     Board.display();
+    //     if (Board.checkTie()) break;
+    //   }
+    //   Board.display();
+    // } while (Board.checkWin() != O && Board.checkWin() != X);
 
     Board.display();
 
