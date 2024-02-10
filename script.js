@@ -1,4 +1,3 @@
-
 const Board = (function() {
 
   let board = [
@@ -13,7 +12,7 @@ const Board = (function() {
         board[row][col] = ' ';
       }
     }
-  }
+  };
 
   const display = () => {
     for (let row = 0; row < 3; row++) {
@@ -23,6 +22,10 @@ const Board = (function() {
       }
       console.log(curRow);
     }
+  };
+
+  const checkTie = () => {
+    return board.every(row => row.every(cell => cell !== ' '));
   };
 
   const checkWin = () => {
@@ -36,10 +39,11 @@ const Board = (function() {
     if (board[0][2] !== "" && board[0][2] === board[1][1] && board[1][1] === board[2][0]) return board[0][2];
 
     return false;
-  }
+  };
+
   const add = (x, y, value) => { board[x][y] = value; };
 
-  return { display, clear, add, checkWin };
+  return { display, clear, add, checkWin, checkTie };
 })();
 
 function createPlayer(icon) {
@@ -75,6 +79,8 @@ const Game = (function() {
 
         Board.display();
         Board.add(prompt("Player 2 enter x coord"), prompt("Player 2 enter y coord"), player2.getIcon());
+
+        if (Board.checkTie()) break;
       }
 
       else {
@@ -84,6 +90,8 @@ const Game = (function() {
 
         Board.display();
         Board.add(prompt("Player 1 enter x coord"), prompt("Player 1 enter y coord"), player1.getIcon());
+
+        if (Board.checkTie()) break;
       }
 
       Board.display();
@@ -91,8 +99,9 @@ const Game = (function() {
 
     Board.display();
 
-    if (player1.getIcon === Board.checkWin()) console.log("Player 1 wins!");
-    else console.log("Player 2 wins!");
+    if (player1.getIcon() === Board.checkWin()) console.log("Player 1 wins!");
+    else if (player2.getIcon() === Board.checkWin()) console.log("Player 2 wins!");
+    else console.log("Tie!");
 
   }
 

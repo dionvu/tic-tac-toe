@@ -1,0 +1,20 @@
+:root {
+  font-size: 16px;
+  --board-size: 1000px;
+}
+
+body {
+  background: black;
+  margin: 0;
+  height: 0;
+  height: 100vh;
+}
+
+#container {
+  background: red;
+
+  height: var(--board-size);
+  width: var(--board-size);
+
+  display: grid;
+}
