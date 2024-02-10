@@ -1,9 +1,4 @@
 const Board = (function() {
-  let currentIcon = 'X';
-
-  const mutCurrentIcon = (newIcon) => {
-    currentIcon = newIcon;
-  }
 
   let board = [
     ['T', 'I', 'C'],
@@ -22,10 +17,17 @@ const Board = (function() {
         container.appendChild(square);
 
         square.addEventListener('click', () => {
-          square.textContent = currentIcon;
+          square.textContent = Game.getCurrentIcon();
 
-          Board.add(i, j, currentIcon);
+          Board.add(i, j, Game.getCurrentIcon());
           Board.display;
+
+          Game.swapCurrentIcon();
+
+          checkTie();
+
+          if (checkWin() === 'X') console.log("WIN X");
+          if (checkWin() === 'Y') console.log("WIN Y");
         });
       }
     }
@@ -68,7 +70,7 @@ const Board = (function() {
 
   const add = (x, y, value) => { board[x][y] = value; };
 
-  return { display, clear, add, checkWin, checkTie, create, mutCurrentIcon };
+  return { display, clear, add, checkWin, checkTie, create, };
 })();
 
 function createPlayer(icon) {
@@ -84,6 +86,8 @@ const Game = (function() {
   let player1;
   let player2;
 
+  let currentIcon;
+
   const start = () => {
     Board.clear();
 
@@ -92,26 +96,13 @@ const Game = (function() {
     if (Math.floor(Math.random() * 2) == 0) {
       player1 = createPlayer(O);
       player2 = createPlayer(X);
+      currentIcon = O;
     }
     else {
       player1 = createPlayer(X);
       player2 = createPlayer(O);
+      currentIcon = X;
     }
-
-    // do {
-    //   if (player1.getIcon() === X) {
-    //     if (Board.checkWin() === player1.getIcon()) break;
-    //     Board.display();
-    //     if (Board.checkTie()) break;
-    //   }
-    //
-    //   else {
-    //     if (Board.checkWin() === player2.getIcon()) break;
-    //     Board.display();
-    //     if (Board.checkTie()) break;
-    //   }
-    //   Board.display();
-    // } while (Board.checkWin() != O && Board.checkWin() != X);
 
     Board.display();
 
@@ -120,7 +111,16 @@ const Game = (function() {
     else console.log("Tie!");
   }
 
-  return { start };
+  const getCurrentIcon = () => {
+    return currentIcon;
+  }
+
+  const swapCurrentIcon = () => {
+    if (currentIcon === X) currentIcon = O;
+    else currentIcon = X;
+  }
+
+  return { start, getCurrentIcon, swapCurrentIcon };
 
 })();
 
