@@ -1,10 +1,35 @@
 const Board = (function() {
+  let currentIcon = 'X';
+
+  const mutCurrentIcon = (newIcon) => {
+    currentIcon = newIcon;
+  }
 
   let board = [
     ['T', 'I', 'C'],
     ['T', 'A', 'C'],
     ['T', 'O', 'E'],
   ];
+
+  const create = () => {
+    const container = document.getElementById('container');
+
+    for (let i = 0; i < 3; i++) {
+      for (let j = 0; j < 3; j++) {
+        let square = document.createElement('div');
+        square.classList.add('square');
+
+        container.appendChild(square);
+
+        square.addEventListener('click', () => {
+          square.textContent = currentIcon;
+
+          Board.add(i, j, currentIcon);
+          Board.display;
+        });
+      }
+    }
+  }
 
   const clear = () => {
     for (let row = 0; row < 3; row++) {
@@ -43,7 +68,7 @@ const Board = (function() {
 
   const add = (x, y, value) => { board[x][y] = value; };
 
-  return { display, clear, add, checkWin, checkTie };
+  return { display, clear, add, checkWin, checkTie, create, mutCurrentIcon };
 })();
 
 function createPlayer(icon) {
@@ -62,6 +87,8 @@ const Game = (function() {
   const start = () => {
     Board.clear();
 
+    Board.create();
+
     if (Math.floor(Math.random() * 2) == 0) {
       player1 = createPlayer(O);
       player2 = createPlayer(X);
@@ -73,27 +100,16 @@ const Game = (function() {
 
     do {
       if (player1.getIcon() === X) {
-        Board.add(prompt("Player 1 enter x coord"), prompt("Player 1 enter y coord"), player1.getIcon());
-
         if (Board.checkWin() === player1.getIcon()) break;
-
         Board.display();
-        Board.add(prompt("Player 2 enter x coord"), prompt("Player 2 enter y coord"), player2.getIcon());
-
         if (Board.checkTie()) break;
       }
 
       else {
-        Board.add(prompt("Player 2 enter x coord"), prompt("Player 2 enter y coord"), player2.getIcon());
-
         if (Board.checkWin() === player2.getIcon()) break;
-
         Board.display();
-        Board.add(prompt("Player 1 enter x coord"), prompt("Player 1 enter y coord"), player1.getIcon());
-
         if (Board.checkTie()) break;
       }
-
       Board.display();
     } while (Board.checkWin() != O && Board.checkWin() != X);
 
@@ -102,7 +118,6 @@ const Game = (function() {
     if (player1.getIcon() === Board.checkWin()) console.log("Player 1 wins!");
     else if (player2.getIcon() === Board.checkWin()) console.log("Player 2 wins!");
     else console.log("Tie!");
-
   }
 
   return { start };
