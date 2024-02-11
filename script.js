@@ -26,7 +26,6 @@ const Board = (function() {
           square.textContent = Game.getCurrentIcon();
 
           Board.add(i, j, Game.getCurrentIcon());
-          Board.display;
 
           Game.swapCurrentIcon();
 
@@ -47,20 +46,6 @@ const Board = (function() {
     }
   };
 
-  const display = () => {
-    for (let row = 0; row < 3; row++) {
-      let curRow = '';
-      for (let col = 0; col < 3; col++) {
-        curRow += board[row][col] + ' ';
-      }
-      console.log(curRow);
-    }
-  };
-
-  const checkTie = () => {
-    return board.every(row => row.every(cell => cell !== ' '));
-  };
-
   const checkWin = () => {
     for (let i = 0; i < 3; i++) {
       if (board[i][0] !== "" && board[i][0] === board[i][1] && board[i][1] === board[i][2]) return board[i][0];
@@ -74,9 +59,13 @@ const Board = (function() {
     return false;
   };
 
+  const checkTie = () => {
+    return board.every(row => row.every(cell => cell !== ' '));
+  };
+
   const add = (x, y, value) => { board[x][y] = value; };
 
-  return { display, clear, add, checkWin, checkTie, create, };
+  return { clear, add, checkWin, checkTie, create, };
 })();
 
 function createPlayer(icon) {
@@ -108,12 +97,6 @@ const Game = (function() {
       player2 = createPlayer(O);
       currentIcon = X;
     }
-
-    Board.display();
-
-    if (player1.getIcon() === Board.checkWin()) console.log('Player 1 wins!');
-    else if (player2.getIcon() === Board.checkWin()) console.log('Player 2 wins!');
-    else console.log('Tie!');
   }
 
   const displayWin = (winner) => {
@@ -150,7 +133,6 @@ const Game = (function() {
     resetButton.classList.add('reset-button');
     resetButton.textContent = 'Reset';
     document.body.appendChild(resetButton);
-
     resetButton.addEventListener('click', () => {
       Game.start();
     });
@@ -168,7 +150,5 @@ const Game = (function() {
   return { start, getCurrentIcon, swapCurrentIcon, displayWin, displayTie };
 
 })();
-
-Board.display();
 
 Game.start();
