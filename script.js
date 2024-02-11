@@ -7,7 +7,13 @@ const Board = (function() {
   ];
 
   const create = () => {
-    const container = document.getElementById('container');
+    Board.clear();
+
+    document.body.innerHTML = '';
+
+    const container = document.createElement('div');
+    container.setAttribute('id', 'container');
+    document.body.appendChild(container);
 
     for (let i = 0; i < 3; i++) {
       for (let j = 0; j < 3; j++) {
@@ -24,10 +30,10 @@ const Board = (function() {
 
           Game.swapCurrentIcon();
 
-          checkTie();
-
-          if (checkWin() === 'X') console.log("WIN X");
-          if (checkWin() === 'Y') console.log("WIN Y");
+          if (checkTie()) Game.displayTie();
+          else if (checkWin() === 'X') Game.displayWin('X');
+          else if (checkWin() === 'O') Game.displayWin('O');
+          else { }
         });
       }
     }
@@ -89,9 +95,8 @@ const Game = (function() {
   let currentIcon;
 
   const start = () => {
-    Board.clear();
-
     Board.create();
+
 
     if (Math.floor(Math.random() * 2) == 0) {
       player1 = createPlayer(O);
@@ -106,21 +111,61 @@ const Game = (function() {
 
     Board.display();
 
-    if (player1.getIcon() === Board.checkWin()) console.log("Player 1 wins!");
-    else if (player2.getIcon() === Board.checkWin()) console.log("Player 2 wins!");
-    else console.log("Tie!");
+    if (player1.getIcon() === Board.checkWin()) console.log('Player 1 wins!');
+    else if (player2.getIcon() === Board.checkWin()) console.log('Player 2 wins!');
+    else console.log('Tie!');
   }
+
+  const displayWin = (winner) => {
+    document.body.innerHTML = '';
+    if (winner === X) {
+      const winText = document.createElement('div');
+      winText.classList.add('win-text');
+      winText.textContent = 'Winner X / ' + (player1.getIcon() === X ? 'Player 1' : 'Player 2') + '!';
+      document.body.appendChild(winText);
+    }
+
+    if (winner === O) {
+      const winText = document.createElement('div');
+      winText.classList.add('win-text');
+      winText.textContent = 'Winner O / ' + (player1.getIcon() === O ? 'Player 1' : 'Player 2') + '!';
+      document.body.appendChild(winText);
+
+    }
+    createResetButton();
+  }
+
+  const displayTie = () => {
+    document.body.innerHTML = '';
+    const winText = document.createElement('div');
+    winText.classList.add('win-text');
+    winText.textContent = 'Tie!';
+    document.body.appendChild(winText);
+    createResetButton();
+
+  };
+
+  const createResetButton = () => {
+    const resetButton = document.createElement('button');
+    resetButton.classList.add('reset-button');
+    resetButton.textContent = 'Reset';
+    document.body.appendChild(resetButton);
+
+    resetButton.addEventListener('click', () => {
+      Game.start();
+    });
+  };
 
   const getCurrentIcon = () => {
     return currentIcon;
-  }
+  };
 
   const swapCurrentIcon = () => {
     if (currentIcon === X) currentIcon = O;
     else currentIcon = X;
-  }
+  };
 
-  return { start, getCurrentIcon, swapCurrentIcon };
+  return { start, getCurrentIcon, swapCurrentIcon, displayWin, displayTie };
 
 })();
 
